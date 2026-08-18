@@ -1,5 +1,5 @@
 function rightRotate(value: number, amount: number): number {
-  return (value >> amount) | (value << (32 - amount));
+  return ((value >>> amount) | (value << (32 - amount))) >>> 0;
 }
 
 const INITAL_H = new Uint32Array([
@@ -62,7 +62,7 @@ export function sha256(message: string | Uint8Array): Uint8Array {
 
     for (let t = 0; t < 64; t++) {
       const S1 = rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25);
-      const ch = (e & f) ^ (-e & g);
+      const ch = (e & f) ^ (~e & g);
       const temp1 = (h + S1 + ch + K[t] + W[t]) >>> 0;
       const S0 = rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22);
       const maj = (a & b) ^ (a & c) ^ (b & c);
