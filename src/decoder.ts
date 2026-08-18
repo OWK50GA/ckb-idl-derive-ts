@@ -22,7 +22,7 @@ export function decodeWireBytes(
         if (wk.size === 1) {
           result[field.name] = view.getUint8(cursor);
         } else if (wk.size === 4) {
-          result[field.name] === view.getUint32(cursor, true);
+          result[field.name] = view.getUint32(cursor, true);
         } else {
           result[field.name] = view.getBigUint64(cursor, true);
         }

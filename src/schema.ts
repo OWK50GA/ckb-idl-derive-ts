@@ -5,6 +5,7 @@ import { buildIdl, canonicalJsonBytes } from "./idl.js";
 import { lookupType } from "./registry.js";
 import {
   FieldDescriptor,
+  IdlDocument,
   IdlTypeName,
   WitnessConfig,
   WitnessSchema,
@@ -35,7 +36,13 @@ export function defineWitness<F extends Record<string, FieldDescriptor>>(
   const _hashCache = syncSha256(_canonicalBytes);
 
   return {
-    idl,
+    // idl,
+    get idl(): IdlDocument {
+      return {
+        ...idl,
+        witness: idl.witness.map((field) => ({ ...field })),
+      };
+    },
     fromWitnessArgs(index, source): WitnessValues<F> {
       const { HighLevel } = require("@ckb-js-std/core");
       const witnessArgs = HighLevel.loadWitnessArgs(index, source);

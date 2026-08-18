@@ -2,7 +2,7 @@ function rightRotate(value: number, amount: number): number {
   return (value >> amount) | (value << (32 - amount));
 }
 
-const H = new Uint32Array([
+const INITAL_H = new Uint32Array([
   0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c,
   0x1f83d9ab, 0x5be0cd19,
 ]);
@@ -23,6 +23,7 @@ const K = new Uint32Array([
 ]);
 
 export function sha256(message: string | Uint8Array): Uint8Array {
+  const H = new Uint32Array(INITAL_H);
   const msgBytes =
     typeof message === "string" ? new TextEncoder().encode(message) : message;
 
@@ -37,7 +38,7 @@ export function sha256(message: string | Uint8Array): Uint8Array {
   padded.set(withOne);
 
   const view = new DataView(padded.buffer);
-  view.setUint32(totalLen - 8, Math.floor(bitLen / 0x100000));
+  view.setUint32(totalLen - 8, Math.floor(bitLen / 0x1_0000_0000));
   view.setUint32(totalLen - 4, bitLen);
 
   const W = new Uint32Array(64);
@@ -52,7 +53,7 @@ export function sha256(message: string | Uint8Array): Uint8Array {
         (W[t - 15] >>> 3);
       const s1 =
         rightRotate(W[t - 2], 17) ^
-        rightRotate(W[t - 15], 19) ^
+        rightRotate(W[t - 2], 19) ^
         (W[t - 2] >>> 10);
       W[t] = (W[t - 16] + s0 + W[t - 7] + s1) >>> 0;
     }

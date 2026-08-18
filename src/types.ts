@@ -44,7 +44,7 @@ export type WitnessValues<F extends Record<string, FieldDescriptor>> = {
 };
 
 export interface WitnessSchema<F extends Record<string, FieldDescriptor>> {
-  idl: IdlDocument;
+  readonly idl: IdlDocument;
   fromWitnessArgs(index: number, source: number): WitnessValues<F>;
   idlHash(): Uint8Array;
 }

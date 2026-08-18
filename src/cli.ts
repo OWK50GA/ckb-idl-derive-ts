@@ -61,16 +61,33 @@ async function main(argv: string[]): Promise<void> {
     process.exit(1);
   }
 
-  // Resolve to an absolute path so dynamic import works from any cwd
+  // Resolve to an absolute path so dynamic import works from any cwd.
+  // Use pathToFileURL so the ESM loader receives a valid file:// URL on all
+  // platforms, including Windows where bare absolute paths are not valid URLs.
   const { resolve } = await import("node:path");
+  const { pathToFileURL } = await import("node:url");
   const absolutePath = resolve(process.cwd(), schemaFile);
 
   let schema: WitnessSchema<Record<string, FieldDescriptor>>;
 
   try {
-    const mod = await import(absolutePath);
+    const mod = await import(pathToFileURL(absolutePath).href);
     schema = mod.default ?? mod;
-    if (!schema || typeof schema.idlHash !== "function") {
+
+    // Validate that the export has the required WitnessSchema runtime shape.
+    // Check both the function contract and the IdlDocument structure so we
+    // catch bad exports before writeIdl attempts to serialise the idl property.
+    const isValidSchema =
+      schema !== null &&
+      typeof schema === "object" &&
+      typeof schema.idlHash === "function" &&
+      schema.idl !== null &&
+      typeof schema.idl === "object" &&
+      typeof schema.idl.idl_version === "string" &&
+      typeof schema.idl.name === "string" &&
+      Array.isArray(schema.idl.witness);
+
+    if (!isValidSchema) {
       throw new Error(
         "The module's default export does not look like a WitnessSchema. " +
           "Make sure you export the result of defineWitness() as the default export."
