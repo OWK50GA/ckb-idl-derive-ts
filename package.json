@@ -4,24 +4,30 @@
   "type": "module",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.cjs"
     }
   },
   "bin": {
     "ckb-idl-derive": "./dist/cli.js"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup",
     "test": "vitest run",
-    "dev": "tsup --watch"
+    "dev": "tsup --watch",
+    "format": "prettier --write ."
   },
   "devDependencies": {
     "@types/node": "22.15.29",
     "tsup": "8.5.0",
     "typescript": "5.8.3",
     "vitest": "3.2.4"
+  },
+  "dependencies": {
+    "prettier": "^3.9.6"
   }
 }
