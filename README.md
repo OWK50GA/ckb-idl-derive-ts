@@ -1,6 +1,6 @@
 # idl-derive-ts
 
-TypeScript counterpart to [`ckb-idl-derive`](../ckb-idl-derive). Lets you declare a CKB lock script's witness layout in TypeScript, produce the same `idl.json` artifact the Rust proc-macro generates, and decode wire-format witnesses at runtime inside [ckb-js-vm](https://github.com/nervosnetwork/ckb-js-vm).
+TypeScript counterpart to [`ckb-idl-derive`](https://github.com/OWK50GA/ckb-idl-derive). Lets you declare a CKB lock script's witness layout in TypeScript, produce the same `idl.json` artifact the Rust proc-macro generates, and decode wire-format witnesses at runtime inside [ckb-js-vm](https://github.com/nervosnetwork/ckb-js-vm).
 
 ---
 
@@ -81,7 +81,7 @@ npx ckb-idl-derive dist/witness.js
 npx ckb-idl-derive dist/witness.js ./src/idl.json
 ```
 
-The JSON produced is identical to what `#[derive(CkbWitness)]` produces on the Rust side. The Rust and TypeScript implementations share [canonical test vectors](../ckb-idl-client/test-vectors.json) that verify byte-for-byte compatibility.
+The JSON produced is identical to what `#[derive(CkbWitness)]` produces on the Rust side. The Rust and TypeScript implementations share [canonical test vectors](https://github.com/OWK50GA/ckb-idl-client/blob/master/test-vectors.json) that verify byte-for-byte compatibility.
 
 ---
 
